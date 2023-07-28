@@ -8,7 +8,7 @@
     document.addEventListener('alpine:init', () => {
         Alpine.store('cookieBanner', {
             consent: Alpine.$persist({{ seo:hide_by_default ? true : 'null' }}).as('cookieBannerConsent'),
-            embeds: Alpine.$persist(null).as('cookieBannerEmbeds'),
+            embeds: Alpine.$persist({{ seo:consent_by_default && seo:embeds ? 'true' : 'false' }}).as('cookieBannerEmbeds'),
             setConsent(value) {
                 this.consent = value
             },
@@ -23,11 +23,11 @@
     {{# Persist null as untouched banner state. #}}
     x-data="{
         cookieConsentDate: $persist(null).as('cookieBannerConsentDate'),
-        analyticsStorage: $persist(false).as('cookieBannerAnalyticsStorage'),
-        adStorage: $persist(false).as('cookieBannerAdStorage'),
+        analyticsStorage: $persist({{ seo:consent_by_default && (seo:tracker_type == 'gtag' || seo:tracker_type == 'gtm') ? 'true' : 'false' }}).as('cookieBannerAnalyticsStorage'),
+        adStorage: $persist({{ seo:consent_by_default && seo:tracker_type == 'gtm' ? 'true' : 'false' }}).as('cookieBannerAdStorage'),
         embeds: $store.cookieBanner.embeds,
         {{ seo:scripts }}
-            customScript{{ count }}: $persist(false).as('cookieBannerCustomScript{{ count }}'){{ !last ?= ',' }}
+            customScript{{ count }}: $persist({{ seo:consent_by_default && seo:scripts ? 'true' : 'false' }}).as('cookieBannerCustomScript{{ count }}'){{ !last ?= ',' }}
         {{ /seo:scripts }}
     }"
     {{ if seo:tracker_type !== 'none' || seo:embeds }}

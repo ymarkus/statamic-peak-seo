@@ -278,6 +278,20 @@ fields:
         embeds: 'equals true'
         tracker_type: 'equals none'
   -
+    handle: consent_by_default
+    field:
+      default: false
+      display: 'Consent by default'
+      type: toggle
+      icon: toggle
+      instructions: 'Have the check boxes in the cookie banner checked by default. `Note:` this is still be GDPR-compliant, as the user can click "ignore" to not consent.'
+      listable: hidden
+      instructions_position: below
+      visibility: visible
+      always_save: false
+      if:
+        use_cookie_banner: 'equals true'
+  -
     handle: display_style
     field:
       options:
